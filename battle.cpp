@@ -1,46 +1,53 @@
-#ifndef CHARACTER_H
-#define CHARACTER_H
-
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <ctime>
+#include<iostream>
+#include "battle.h"
 
 using namespace std;
 
-class character
+//decide the defenser is hit or not
+bool hit_or_not(character hitter,character defenser)
 {
-    //friendship with battle.h
-    friend bool fighting(character player1,character &player2);
-    friend bool hit_or_not(character hitter, character defenser);
-    friend int damage_cal(character hitter, character &defenser);
-public:
-    //constructor
-    character(string s);
-    character();
-    //access the ability
-    int access_atk(){return attack;}
-    int access_def(){return defense;}
-    int access_agl(){return agility;}
-    int access_hp(){return health;}
-    int access_spd(){return speed;}
-    string access_name(){return name;}
 
-    //check the person live or not
-    bool live_or_not();
+    if((defenser.agility)*((double)(rand()%10/10)+0.5>rand()%100))//rand()%10 is unsigned,do the cast to
+        return 0;                                                 //get ratio.
+    else return 1;
+}
 
-    //print all ability
-    void print_total();
-private:
-    string name;
-    int attack;
-    int defense;
-    int agility;
-    int speed;
-    int health;
-    bool live=1;
-};
+//calculate the damage of defenser
+int damage_cal(character hitter,character& defenser)
+{
+    int damage;
+    double ratio_damage;
+    ratio_damage=((double)(rand()%10)/10)+0.5;
+    if(hitter.attack>defenser.defense)
+        damage=(5+hitter.attack-defenser.defense)*ratio_damage;
+    else damage=5*ratio_damage;
+    defenser.health-=damage;
 
+    return damage;
 
+}
 
-#endif // CHARACTER_H
+//total fighting process
+bool fighting(character attacker,character &defenser)
+{
+    cout<<attacker.name<<"對"
+        <<defenser.name<<"展開攻擊!!\n";
+    if(!hit_or_not(attacker,defenser))
+    {
+        cout<<defenser.name<<"躲過了"
+            <<attacker.name<<"的攻擊!!\n";
+    }
+    else
+    {
+        cout<<defenser.name<<"受到"
+            <<damage_cal(attacker,defenser) <<"點傷害!!\n";
+    }
+    if(!defenser.live_or_not())
+    {
+        cout<<defenser.name<<"失去戰鬥能力!\n"
+            <<attacker.name<<"獲勝!\n";
+        return 1;
+    }
+    return 0;
+}
+
