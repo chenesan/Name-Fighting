@@ -7,4 +7,4 @@ battle.o: battle.cpp
 character.o: character.cpp
 	g++ character.cpp -c
 clean:
-	rm -rf main.o battle.o character.o
+	rm -rf battle.o character.o
